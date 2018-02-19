@@ -18,11 +18,14 @@ Minify: [undoMgr.min.js](http://creativecoder.xyz/undomgr/dist/undoMgr.min.js)
 
 ## Demo
 
-1. [form example](http://creativecoder.xyz/undomgr/example/1.form.html)
+1. [form - jquery example](http://creativecoder.xyz/undomgr/example/1.form-jquery.html)
 
-2. [textarea example](http://creativecoder.xyz/undomgr/example/2.textarea.html)
+2. [textarea - jquery example](http://creativecoder.xyz/undomgr/example/2.textarea-jquery.html)
 
-3. [range example](http://creativecoder.xyz/undomgr/example/3.range.html)
+3. [slider - jquery example](http://creativecoder.xyz/undomgr/example/3.slider-jquery.html)
+
+4. [resize - javascript example](http://creativecoder.xyz/undomgr/example/4.resize-javascript.html)
+
 
 ## Install & Usage
 
