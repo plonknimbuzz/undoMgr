@@ -187,6 +187,22 @@ undo.redo();
 console.log(undo.getData()); //2
 ``` 
 
+#### getData()
+Get data from the current history index .
+```javascript
+var undo = undoMgr();
+undo.add(1);
+console.log(undo.getData()); //1
+undo.add(2);
+console.log(undo.getData()); //2
+undo.undo();
+console.log(undo.getData()); //1
+undo.redo();
+console.log(undo.getData()); //2
+``` 
+
+
+
 ## Issue
 
 if you have Any issue/question, you can post it in `issue` menu, or contact me at plonknimbuzz@gmail.com
