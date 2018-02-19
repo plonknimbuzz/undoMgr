@@ -1,0 +1,100 @@
+<!doctype html>
+<html>
+<head>
+	<title>javascript example</title>
+</head>
+<body>
+	<textarea id="textarea" style="width:100px; height:50px;" readonly>Resize this textarea</textarea><br>
+	<input type="reset" value="Reset" id="clear"> 
+	<input type="button" value="Undo" disabled id="undo"> 
+	<input type="button" value="Redo" disabled id="redo"> 
+	<br>
+	debug tool<br>
+	<button id="show">show data</button>
+	<button id="count">count data</button>
+	<button id="index">get recent index</button>
+	<hr>
+	preview:
+	<div id="preview"></div>
+	
+	<script src="jquery-3.2.1.min.js"></script>
+	<script src="../dist/undoMgr.min.js"></script>
+	<script>
+		var textarea= document.getElementById('textarea'), 
+		undoBtn = document.getElementById('undo'),
+		redoBtn = document.getElementById('redo'),
+		preview = document.getElementById('preview');
+	
+		function updateButton(){
+			undoBtn.disabled = !undo.hasUndo()
+			redoBtn.disabled = !undo.hasRedo()
+			displaySize();
+		}
+				
+		function displaySize(){
+			preview.innerHTML = 'W: '+textarea.style.width +' H: '+ textarea.style.height;
+		}
+
+		function serializeSize(){
+			return [textarea.style.width, textarea.style.height];
+		}
+		
+		function deserializeSize(serializeData){
+			textarea.style.width = serializeData[0]; 
+			textarea.style.height = serializeData[1];
+		}
+		
+		var undo = new undoMgr(10, updateButton); //init undo
+		undo.add(serializeSize()); //save first default color
+		
+		document.getElementById('show').onclick = function(){
+			console.log(undo.show());
+		};
+		
+		document.getElementById('index').onclick = function(){
+			console.log(undo.getIndex());
+		};
+		
+		document.getElementById('count').onclick = function(){
+			console.log(undo.count());
+		};
+		
+		document.getElementById('clear').onclick = function(){
+			undo.clear();
+			deserializeSize(['100px','50px']);
+			undo.add(serializeSize());
+			//updateButton();
+		};
+		
+		undoBtn.onclick = function(){
+			undo.undo();
+			deserializeSize(undo.getData());
+			//updateButton();
+		};
+		
+		redoBtn.onclick = function(){
+			undo.redo();
+			deserializeSize(undo.getData());
+			//updateButton();
+		};
+		
+		/*
+			because most browser not support resize event on element except body/window,
+			so we need hack this using onmousedown and onmouseup
+		*/
+		var w, h;
+		textarea.onmousedown = function(){
+			w = this.style.width;
+			h = this.style.height;
+		};
+		
+		textarea.onmouseup = function(){
+			if(w != this.style.width | h != this.style.height){
+				undo.add(serializeSize());
+				//updateButton(); //if you not set callback, you need to update button manually
+			}
+		};
+		
+	</script>
+</body>
+</html>

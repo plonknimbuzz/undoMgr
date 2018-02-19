@@ -1,0 +1,71 @@
+<!doctype html>
+<html>
+<head>
+	<title>textarea example</title>
+</head>
+<body>
+	<textarea id="content" style="width:400px; height:300px;" placeholder="type here"></textarea><br>
+	<input type="reset" value="Reset" id="clear"> 
+	<input type="button" value="Undo" disabled id="undo"> 
+	<input type="button" value="Redo" disabled id="redo"> 
+	<br>
+	debug tool<br>
+	<button id="show">show data</button>
+	<button id="count">count data</button>
+	<button id="index">get recent index</button>
+	<hr>
+	preview:
+	<div id="preview"></div>
+	
+	<script src="jquery-3.2.1.min.js"></script>
+	<script src="../dist/undoMgr.min.js"></script>
+	<script>
+		$(function(){
+			function updateButton(){
+				$('#undo').prop('disabled', !undo.hasUndo());
+				$('#redo').prop('disabled', !undo.hasRedo());
+			}
+			
+			var undo = new undoMgr(10, updateButton); //init undo
+			undo.add($('#content').val()); //save first default textarea
+
+			$('#show').click(function(){
+				console.log(undo.show());
+			});
+			
+			$('#count').click(function(){
+				console.log(undo.count());
+			});
+			
+			$('#index').click(function(){
+				console.log(undo.getIndex());
+			});
+			
+			$('#content').keyup(function(){
+				undo.add($(this).val());
+				$('#preview').html($(this).val());
+				//updateButton(); //if you not set callback, you need to update button manually
+			});
+			
+			$('#clear').click(function(){
+				$('#content').val('');
+				undo.clear();
+				undo.add($('#content').val());
+				//updateButton();
+			});
+			
+			$('#undo').click(function(){
+				undo.undo();
+				$('#content').val(undo.getData());
+				//updateButton();
+			});
+			
+			$('#redo').click(function(){
+				undo.redo();
+				$('#content').val(undo.getData());
+				//updateButton();
+			});
+		});
+	</script>
+</body>
+</html>

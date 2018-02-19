@@ -1,0 +1,81 @@
+<!doctype html>
+<html>
+<head>
+	<title>form example</title>
+</head>
+<body>
+	<form>
+		<fieldset>
+			<legend>Search forum post</legend>
+			user : <input type="text" name="user"><br>
+			keyword :  <input type="text" name="keyword"><br>
+			place :  <select name="place"><option value="" selected>All</option><option value="1">Asia</option><option value="2">America</option><option value="3">Europe</option></select><br>
+			direction : asc <input type="radio" name="direction" checked value="asc"> desc <input type="radio" name="direction" value="desc"><br>
+			<input type="submit" value="Submit" name="submit"> 
+			<input type="reset" value="Reset" id="clear"> 
+			<input type="button" value="Undo" disabled id="undo"> 
+			<input type="button" value="Redo" disabled id="redo"> 
+		</fieldset>
+	</form>
+	
+	debug tool<br>
+	<button id="show">show data</button>
+	<button id="count">count data</button>
+	<button id="index">get recent index</button>
+	<hr>
+	demo display result<br>
+	<div id="result"></div>
+
+	<script src="jquery-3.2.1.min.js"></script>
+	<script src="../dist/undoMgr.min.js"></script>
+	<script src="deserialize.js"></script>
+	<script>
+		$(function(){
+			function updateButton(){
+				$('#undo').prop('disabled', !undo.hasUndo());
+				$('#redo').prop('disabled', !undo.hasRedo());
+			}
+			
+			var undo = new undoMgr(10, updateButton); //init undo
+			undo.add($('form').serialize()); //save first default form
+
+			$('#show').click(function(){
+				console.log(undo.show());
+			});
+			
+			$('#count').click(function(){
+				console.log(undo.count());
+			});
+			
+			$('#index').click(function(){
+				console.log(undo.getIndex());
+			});
+			
+			$('form').submit(function(e){
+				e.preventDefault();
+				undo.add($(this).serialize());
+				$('#result').text($(this).serialize());
+				//updateButton(); //if you not set callback, you need to update button manually
+			});
+			
+			$('#clear').click(function(){
+				undo.clear();
+				undo.add($('form').serialize());
+				//updateButton();
+			});
+			
+			$('#undo').click(function(){
+				undo.undo();
+				$('form').deserialize(undo.getData());
+				//updateButton();
+			});
+			
+			$('#redo').click(function(){
+				undo.redo();
+				$('form').deserialize(undo.getData());
+				//updateButton();
+			});
+		});
+	</script>
+</body>
+</html>

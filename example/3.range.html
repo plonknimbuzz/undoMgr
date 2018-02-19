@@ -1,0 +1,93 @@
+<!doctype html>
+<html>
+<head>
+	<title>textarea example</title>
+</head>
+<body>
+	Red <input id="red" type="range" min="0" max="255" value="30" > <span>30</span><br>
+	Green <input id="green" type="range" min="0" max="255" value="156" > <span>156</span><br>
+	Blue <input id="blue" type="range" min="0" max="255" value="220" > <span>220</span><br>
+	<input type="reset" value="Reset" id="clear"> 
+	<input type="button" value="Undo" disabled id="undo"> 
+	<input type="button" value="Redo" disabled id="redo"> 
+	<br>
+	debug tool<br>
+	<button id="show">show data</button>
+	<button id="count">count data</button>
+	<button id="index">get recent index</button>
+	<hr>
+	preview:
+	<div id="preview" style="width:200px;height:200px;"></div>
+	
+	<script src="jquery-3.2.1.min.js"></script>
+	<script src="../dist/undoMgr.min.js"></script>
+	<script>
+		$(function(){
+			function updateButton(){
+				$('#undo').prop('disabled', !undo.hasUndo());
+				$('#redo').prop('disabled', !undo.hasRedo());
+				displayColor();
+			}
+			
+			function displayColor(){
+				var red = $('#red').val(), green=$('#green').val(), blue=$('#blue').val();
+				$('#preview').css('background-color','rgb('+red+','+green+','+blue+')')
+					.html('R: '+red+'<br>G: '+green+'<br>B: '+blue);
+			}
+			
+			function serializeRange(){
+				return [$('#red').val(), $('#green').val(), $('#blue').val()];
+			}
+			
+			function deserializeRange(serializeData){
+				$('#red').val(serializeData[0]); 
+				$('#green').val(serializeData[1]);
+				$('#blue').val(serializeData[2]);
+			}
+			
+			$('input[type="range"]').on('input', function(){
+				$(this).next().text($(this).val());
+			});
+			
+			var undo = new undoMgr(10, updateButton); //init undo
+			undo.add(serializeRange()); //save first default color
+			
+			$('#show').click(function(){
+				console.log(undo.show());
+			});
+			
+			$('#count').click(function(){
+				console.log(undo.count());
+			});
+			
+			$('#index').click(function(){
+				console.log(undo.getIndex());
+			});
+			
+			$('input[type="range"]').change(function(){
+				undo.add(serializeRange());
+				//updateButton(); //if you not set callback, you need to update button manually
+			});
+			
+			$('#clear').click(function(){
+				undo.clear();
+				deserializeRange([30,156,220]);
+				undo.add(serializeRange());
+				//updateButton();
+			});
+			
+			$('#undo').click(function(){
+				undo.undo();
+				deserializeRange(undo.getData());
+				//updateButton();
+			});
+			
+			$('#redo').click(function(){
+				undo.redo();
+				deserializeRange(undo.getData());
+				//updateButton();
+			});
+		});
+	</script>
+</body>
+</html>
