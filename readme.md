@@ -1,10 +1,20 @@
 # Javascript Undo Manager (undoMgr.js)
 
-undoMgr.js is simple (pure) javascript library for manage undo and redo feature. This library is not only can used for editable textarea but can be used for many case. You can see example to see how this library works.
+undoMgr.js is simple (pure) javascript library for manage undo and redo feature. This library is not only can used for editable textarea but can be used for many case. You can see *[example](#javascript-undo-manager-undomgrjs-demo)* to know how this library works.
+
+ * history saved as an array not object
+ * support all data type: array, object, string, boolean, etc
+ * Easy to use
+ * Lightweight (< 1 KB)
+ * Clearly documented (*example included*)
+ * Written on *pure* javascript
+
+
+*Current version: v1.0 - (2018-02-19)*
 
 ## History
 
-When i need undo feature on my apps, i only found 2 undo library in github. The most suitable for me is [Javascript-Undo-Manager](https://github.com/ArthurClemens/Javascript-Undo-Manager) created by [ArthurClemens](https://github.com/ArthurClemens). But because i lack of javascript, i have several problem to use it. Then i try to modified the code to make more easy to use for me (_and i hope for the others too_).
+When i need undo feature on my apps, i only found 2 undo library in github. The most suitable for me is [Javascript-Undo-Manager](https://github.com/ArthurClemens/Javascript-Undo-Manager) created by [ArthurClemens](https://github.com/ArthurClemens). But because i have several problem to use it. Then i try to modified the code to make more easy to use for me (_and i hope for the others too_).
 
 ## Documentation
 
